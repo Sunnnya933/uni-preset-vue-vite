@@ -1,0 +1,56 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>可爱小猪 · 注册原型</title>
+  <style>
+    *{box-sizing:border-box;margin:0;padding:0}body{min-height:100vh;display:flex;align-items:center;justify-content:center;background:linear-gradient(135deg,#ffe6f7,#ffd4ed 45%,#ffe0f5);font-family:"PingFang SC","Microsoft YaHei",sans-serif;color:#5d4e60}.phone-label{text-align:center;font-size:13px;font-weight:800;color:#ff8cc6;letter-spacing:.12em;margin-bottom:10px}.phone{width:375px;height:812px;max-width:calc(100vw - 24px);max-height:calc(100vh - 54px);background:#1a1a1a;border-radius:46px;padding:14px;box-shadow:0 0 0 3px #333,0 24px 60px rgba(0,0,0,.35);position:relative}.notch{position:absolute;top:14px;left:50%;transform:translateX(-50%);width:112px;height:28px;background:#1a1a1a;border-radius:0 0 16px 16px;z-index:3}.screen{height:100%;border-radius:36px;overflow:hidden;background:#fff5fb;position:relative;padding:58px 26px 28px;display:flex;flex-direction:column}.blob{position:absolute;border-radius:50%;opacity:.35;filter:blur(1px)}.b1{width:140px;height:140px;background:#ffe6f2;top:-30px;left:-38px}.b2{width:96px;height:96px;background:#d4a5ff;top:45px;right:-18px}.b3{width:82px;height:82px;background:#b3e5fc;bottom:150px;left:-22px}.header{text-align:center;position:relative;z-index:1}.pig{width:92px;height:92px;margin-bottom:10px;animation:bounce 2.4s ease-in-out infinite}@keyframes bounce{50%{transform:translateY(-5px)}}h1{font-size:27px;color:#ff8cc6;font-weight:900}p.sub{font-size:14px;color:#9d8ca0;margin-top:6px}.form{position:relative;z-index:1;margin-top:28px;display:flex;flex-direction:column;gap:16px}.field label{display:block;font-size:14px;font-weight:800;margin-bottom:8px}.input-wrap{height:58px;background:white;border:2px solid transparent;border-radius:16px;display:flex;align-items:center;box-shadow:0 4px 18px rgba(0,0,0,.06);transition:.2s}.input-wrap:focus-within{border-color:#d4a5ff;box-shadow:0 6px 20px rgba(179,136,255,.22);transform:translateY(-1px)}.input-wrap.error{border-color:#ef5350;animation:shake .35s}@keyframes shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}.icon{width:48px;text-align:center;font-size:20px}input{flex:1;min-width:0;border:0;outline:0;font-size:16px;color:#5d4e60;background:transparent}.toggle{width:42px;border:0;background:transparent;cursor:pointer;font-size:18px}.tip{display:block;min-height:16px;margin-top:5px;font-size:12px;color:#66bb6a}.tip.err{color:#ef5350}.btn{height:60px;border:0;border-radius:18px;background:linear-gradient(135deg,#d4a5ff,#b388ff);color:white;font-size:18px;font-weight:900;letter-spacing:.08em;box-shadow:0 10px 28px rgba(179,136,255,.36);cursor:pointer}.btn:disabled{opacity:.82;cursor:not-allowed}.footer{margin-top:auto;text-align:center;font-size:14px;color:#9d8ca0}.footer a{color:#ff8cc6;font-weight:800;text-decoration:none;cursor:pointer}.toast{position:absolute;left:50%;bottom:96px;transform:translateX(-50%) translateY(18px);background:rgba(45,42,38,.92);color:white;border-radius:999px;padding:10px 18px;font-size:13px;opacity:0;transition:.25s;white-space:nowrap;z-index:4}.toast.show{opacity:1;transform:translateX(-50%) translateY(0)}.success{position:absolute;inset:0;border-radius:36px;background:rgba(255,245,251,.96);display:flex;align-items:center;justify-content:center;flex-direction:column;opacity:0;pointer-events:none;transition:.3s;z-index:5}.success.show{opacity:1;pointer-events:auto}.check{width:68px;height:68px;border-radius:50%;background:#a5d6a7;color:white;font-size:36px;display:flex;align-items:center;justify-content:center;margin-bottom:14px}.success h2{color:#ff8cc6;font-size:22px}.success p{color:#9d8ca0;margin-top:6px;font-size:14px}
+  </style>
+</head>
+<body>
+  <div>
+    <div class="phone-label">375 × 812 · 移动端预览</div>
+    <div class="phone">
+      <div class="notch"></div>
+      <main class="screen">
+        <div class="blob b1"></div><div class="blob b2"></div><div class="blob b3"></div>
+        <section class="header">
+          <svg class="pig" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-label="可爱小猪">
+            <ellipse cx="60" cy="75" rx="35" ry="28" fill="#ffb3d9"/><circle cx="60" cy="50" r="32" fill="#ffb3d9"/>
+            <ellipse cx="38" cy="28" rx="8" ry="14" fill="#ffb3d9" transform="rotate(-25 38 28)"/><ellipse cx="82" cy="28" rx="8" ry="14" fill="#ffb3d9" transform="rotate(25 82 28)"/>
+            <ellipse cx="38" cy="28" rx="5" ry="9" fill="#ff8cc6" transform="rotate(-25 38 28)"/><ellipse cx="82" cy="28" rx="5" ry="9" fill="#ff8cc6" transform="rotate(25 82 28)"/>
+            <circle cx="48" cy="45" r="4" fill="#5d4e60"/><circle cx="72" cy="45" r="4" fill="#5d4e60"/><ellipse cx="60" cy="58" rx="12" ry="10" fill="#ffadd2"/>
+            <ellipse cx="56" cy="58" rx="3" ry="4" fill="#ff8cc6"/><ellipse cx="64" cy="58" rx="3" ry="4" fill="#ff8cc6"/>
+            <path d="M60 62 Q55 68 50 66M60 62 Q65 68 70 66" stroke="#5d4e60" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+            <ellipse cx="28" cy="75" rx="8" ry="6" fill="#ffb3d9"/><ellipse cx="92" cy="75" rx="8" ry="6" fill="#ffb3d9"/><ellipse cx="48" cy="100" rx="8" ry="6" fill="#ffb3d9"/><ellipse cx="72" cy="100" rx="8" ry="6" fill="#ffb3d9"/>
+          </svg>
+          <h1>加入猪猪家族</h1><p class="sub">创建你的专属账号～</p>
+        </section>
+        <form class="form" id="form" novalidate>
+          <div class="field"><label for="account">账号</label><div class="input-wrap" id="accountWrap"><span class="icon">👤</span><input id="account" placeholder="请输入账号（字母/数字）" /></div><span class="tip" id="accountTip"></span></div>
+          <div class="field"><label for="password">密码</label><div class="input-wrap" id="pwdWrap"><span class="icon">🔒</span><input id="password" type="password" placeholder="请输入密码（6-20位）" /><button class="toggle" type="button" data-target="password">👁</button></div><span class="tip" id="pwdTip"></span></div>
+          <div class="field"><label for="confirm">确认密码</label><div class="input-wrap" id="confirmWrap"><span class="icon">🔐</span><input id="confirm" type="password" placeholder="请再次输入密码" /><button class="toggle" type="button" data-target="confirm">👁</button></div><span class="tip err" id="confirmTip"></span></div>
+          <button class="btn" id="submitBtn" type="submit">立即注册</button>
+        </form>
+        <footer class="footer">已有账号？<a id="loginLink">立即登录</a></footer>
+        <div class="toast" id="toast"></div>
+        <div class="success" id="success"><div class="check">✓</div><h2>注册成功！</h2><p>即将返回登录页</p></div>
+      </main>
+    </div>
+  </div>
+  <script>
+    const $=id=>document.getElementById(id),form=$('form'),account=$('account'),password=$('password'),confirm=$('confirm'),toast=$('toast'),success=$('success'),submitBtn=$('submitBtn');
+    const accountWrap=$('accountWrap'),pwdWrap=$('pwdWrap'),confirmWrap=$('confirmWrap'),accountTip=$('accountTip'),pwdTip=$('pwdTip'),confirmTip=$('confirmTip');let timer;
+    function showToast(msg){clearTimeout(timer);toast.textContent=msg;toast.classList.add('show');timer=setTimeout(()=>toast.classList.remove('show'),2200)}
+    function err(wrap,on){wrap.classList.toggle('error',on)}
+    function validAccount(){const v=account.value.trim();if(!v){accountTip.textContent='';err(accountWrap,false);return false}if(!/^[a-zA-Z0-9]{4,16}$/.test(v)){accountTip.textContent='账号为4-16位字母或数字';accountTip.className='tip err';err(accountWrap,true);return false}accountTip.textContent='✓ 账号格式正确';accountTip.className='tip';err(accountWrap,false);return true}
+    function validPwd(){const v=password.value;if(!v){pwdTip.textContent='';err(pwdWrap,false);return false}if(v.length<6||v.length>20){pwdTip.textContent='密码长度为6-20位';pwdTip.className='tip err';err(pwdWrap,true);return false}pwdTip.textContent='✓ 密码强度合格';pwdTip.className='tip';err(pwdWrap,false);if(confirm.value)validConfirm();return true}
+    function validConfirm(){if(!confirm.value){confirmTip.textContent='';err(confirmWrap,false);return false}if(confirm.value!==password.value){confirmTip.textContent='两次密码不一致';err(confirmWrap,true);return false}confirmTip.textContent='';err(confirmWrap,false);return true}
+    account.addEventListener('input',validAccount);password.addEventListener('input',validPwd);confirm.addEventListener('input',validConfirm);
+    document.querySelectorAll('.toggle').forEach(b=>b.addEventListener('click',()=>{const i=$(b.dataset.target),show=i.type==='password';i.type=show?'text':'password';b.textContent=show?'🙈':'👁'}));
+    form.addEventListener('submit',async e=>{e.preventDefault();if(!(validAccount()&validPwd()&validConfirm())){showToast('请按提示填写注册信息哦～');return}submitBtn.disabled=true;submitBtn.textContent='注册中...';await new Promise(r=>setTimeout(r,900));success.classList.add('show');setTimeout(()=>location.href='./login-prototype.html',1500)});
+    $('loginLink').addEventListener('click',e=>{e.preventDefault();location.href='./login-prototype.html'});
+  </script>
+</body>
+</html>

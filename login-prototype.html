@@ -1,0 +1,781 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>可爱小猪 · 移动端登录原型</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+SC:wght@400;500;700;900&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --pig-pink: #ffb3d9;
+      --pig-pink-dark: #ff8cc6;
+      --pig-nose: #ffadd2;
+      --pig-light: #ffe6f2;
+      --pig-cream: #fff0f7;
+      --pig-purple: #d4a5ff;
+      --pig-sky: #b3e5fc;
+      --pig-green: #a5d6a7;
+      --pig-bg: #fff5fb;
+      --text-main: #5d4e60;
+      --text-muted: #9d8ca0;
+      --shadow: 0 12px 40px rgba(255, 140, 198, 0.25);
+      --radius: 20px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+
+    html, body {
+      height: 100%;
+      overflow: hidden;
+      font-family: "Noto Sans SC", "PingFang SC", "Microsoft YaHei", sans-serif;
+      background: linear-gradient(135deg, #ffe6f7 0%, #ffd4ed 40%, #ffe0f5 100%);
+      color: var(--text-main);
+    }
+
+    .canvas {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 28px;
+      height: 100vh;
+      padding: 16px 24px;
+      max-width: 1280px;
+      margin: 0 auto;
+    }
+
+    /* —— 手机外框 —— */
+    .phone-wrap {
+      flex-shrink: 0;
+      position: relative;
+    }
+
+    .phone-label {
+      text-align: center;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--pig-pink-dark);
+      letter-spacing: 0.12em;
+      margin-bottom: 8px;
+      text-transform: uppercase;
+    }
+
+    .phone {
+      width: 300px;
+      height: 580px;
+      background: #1a1a1a;
+      border-radius: 36px;
+      padding: 10px;
+      box-shadow:
+        0 0 0 2px #333,
+        0 24px 60px rgba(0,0,0,0.35),
+        inset 0 0 0 1px #444;
+      position: relative;
+    }
+
+    .phone-notch {
+      position: absolute;
+      top: 10px;
+      left: 50%;
+      transform: translateX(-50%);
+      width: 90px;
+      height: 22px;
+      background: #1a1a1a;
+      border-radius: 0 0 14px 14px;
+      z-index: 10;
+    }
+
+    .phone-screen {
+      width: 100%;
+      height: 100%;
+      border-radius: 28px;
+      overflow: hidden;
+      background: var(--pig-bg);
+      position: relative;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* —— 登录页内容 —— */
+    .login-header {
+      padding: 36px 20px 12px;
+      text-align: center;
+      position: relative;
+    }
+
+    .blob {
+      position: absolute;
+      border-radius: 50%;
+      opacity: 0.35;
+      filter: blur(1px);
+    }
+    .blob-1 { width: 120px; height: 120px; background: var(--pig-light); top: -20px; left: -30px; }
+    .blob-2 { width: 80px; height: 80px; background: var(--pig-purple); top: 10px; right: -10px; }
+
+    .mascot {
+      width: 88px;
+      height: 88px;
+      margin: 0 auto 10px;
+      position: relative;
+      z-index: 2;
+      animation: bounce 2.5s ease-in-out infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-4px); }
+    }
+
+    .login-header h1 {
+      font-size: 20px;
+      font-weight: 900;
+      color: var(--pig-pink-dark);
+      letter-spacing: 0.02em;
+      position: relative;
+      z-index: 2;
+    }
+
+    .login-header p {
+      font-size: 11px;
+      color: var(--text-muted);
+      margin-top: 4px;
+      position: relative;
+      z-index: 2;
+    }
+
+    .login-form {
+      flex: 1;
+      padding: 8px 20px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+    }
+
+    .field label {
+      display: block;
+      font-size: 11px;
+      font-weight: 700;
+      color: var(--text-main);
+      margin-bottom: 6px;
+    }
+
+    .input-wrap {
+      position: relative;
+      display: flex;
+      align-items: center;
+      background: #fff;
+      border: 2px solid transparent;
+      border-radius: 12px;
+      box-shadow: 0 2px 12px rgba(0,0,0,0.06);
+      transition: border-color 0.2s, box-shadow 0.2s, transform 0.15s;
+    }
+
+    .input-wrap:focus-within {
+      border-color: var(--pig-pink);
+      box-shadow: 0 4px 16px rgba(255, 140, 198, 0.25);
+      transform: translateY(-1px);
+    }
+
+    .input-wrap.error {
+      border-color: #ef5350;
+      animation: shake 0.4s ease;
+    }
+
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      25% { transform: translateX(-4px); }
+      75% { transform: translateX(4px); }
+    }
+
+    .input-icon {
+      width: 40px;
+      text-align: center;
+      font-size: 16px;
+      flex-shrink: 0;
+    }
+
+    .input-wrap input {
+      flex: 1;
+      border: none;
+      outline: none;
+      padding: 12px 8px 12px 0;
+      font-size: 14px;
+      background: transparent;
+      font-family: inherit;
+      color: var(--text-main);
+    }
+
+    .input-wrap input::placeholder { color: #bdbdbd; }
+
+    .toggle-pwd {
+      width: 40px;
+      height: 40px;
+      border: none;
+      background: none;
+      cursor: pointer;
+      font-size: 16px;
+      opacity: 0.6;
+      transition: opacity 0.2s, transform 0.15s;
+    }
+    .toggle-pwd:hover { opacity: 1; transform: scale(1.1); }
+    .toggle-pwd:active { transform: scale(0.95); }
+
+    .forgot {
+      text-align: right;
+      font-size: 11px;
+    }
+    .forgot a {
+      color: var(--pig-purple);
+      text-decoration: none;
+      font-weight: 500;
+      cursor: pointer;
+    }
+    .forgot a:hover { text-decoration: underline; color: #b388ff; }
+
+    .btn-login {
+      width: 100%;
+      padding: 14px;
+      border: none;
+      border-radius: 14px;
+      font-size: 15px;
+      font-weight: 800;
+      color: #fff;
+      cursor: pointer;
+      background: linear-gradient(135deg, var(--pig-pink) 0%, var(--pig-pink-dark) 100%);
+      box-shadow: 0 6px 20px rgba(255, 140, 198, 0.4);
+      position: relative;
+      overflow: hidden;
+      transition: transform 0.15s, box-shadow 0.2s;
+      font-family: inherit;
+      letter-spacing: 0.08em;
+    }
+
+    .btn-login:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 24px rgba(255, 140, 198, 0.5);
+    }
+    .btn-login:active { transform: translateY(0) scale(0.98); }
+
+    .btn-login.loading {
+      pointer-events: none;
+      opacity: 0.85;
+    }
+
+    .btn-login .ripple {
+      position: absolute;
+      border-radius: 50%;
+      background: rgba(255,255,255,0.4);
+      transform: scale(0);
+      animation: ripple 0.6s ease-out;
+      pointer-events: none;
+    }
+
+    @keyframes ripple {
+      to { transform: scale(4); opacity: 0; }
+    }
+
+  .btn-login .spinner {
+      display: none;
+      width: 18px;
+      height: 18px;
+      border: 2px solid rgba(255,255,255,0.3);
+      border-top-color: #fff;
+      border-radius: 50%;
+      animation: spin 0.7s linear infinite;
+      margin-right: 8px;
+      vertical-align: middle;
+    }
+    .btn-login.loading .spinner { display: inline-block; }
+
+    @keyframes spin { to { transform: rotate(360deg); } }
+
+    .login-footer {
+      padding: 0 20px 24px;
+      text-align: center;
+    }
+
+    .register-hint {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+    .register-hint a {
+      color: var(--pig-pink);
+      font-weight: 700;
+      text-decoration: none;
+      cursor: pointer;
+    }
+
+    .toast {
+      position: absolute;
+      bottom: 80px;
+      left: 50%;
+      transform: translateX(-50%) translateY(20px);
+      background: rgba(45, 42, 38, 0.92);
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 20px;
+      font-size: 12px;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.3s, transform 0.3s;
+      white-space: nowrap;
+      z-index: 20;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    .success-overlay {
+      position: absolute;
+      inset: 0;
+      background: rgba(255, 245, 251, 0.95);
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      opacity: 0;
+      pointer-events: none;
+      transition: opacity 0.35s;
+      z-index: 30;
+      border-radius: 28px;
+    }
+    .success-overlay.show {
+      opacity: 1;
+      pointer-events: auto;
+    }
+
+    .success-overlay .check {
+      width: 64px;
+      height: 64px;
+      background: var(--pig-green);
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 32px;
+      color: #fff;
+      margin-bottom: 12px;
+      animation: pop 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    }
+
+    @keyframes pop {
+      from { transform: scale(0); }
+      to { transform: scale(1); }
+    }
+
+    .success-overlay h3 {
+      font-size: 18px;
+      color: var(--pig-pink-dark);
+    }
+    .success-overlay p { font-size: 12px; color: var(--text-muted); margin-top: 4px; }
+
+    /* —— 设计说明面板 —— */
+    .spec-panel {
+      flex: 1;
+      min-width: 0;
+      max-height: calc(100vh - 32px);
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(12px);
+      border-radius: 20px;
+      padding: 20px 22px;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.08);
+      border: 1px solid rgba(255,255,255,0.9);
+      overflow-y: auto;
+    }
+
+    .spec-header {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 14px;
+      padding-bottom: 12px;
+      border-bottom: 2px dashed var(--pig-light);
+    }
+
+    .spec-badge {
+      background: var(--pig-pink);
+      color: #fff;
+      font-size: 10px;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      letter-spacing: 0.05em;
+    }
+
+    .spec-header h2 {
+      font-size: 16px;
+      font-weight: 900;
+      color: var(--text-main);
+    }
+
+    .spec-header span {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 400;
+    }
+
+    .spec-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px 16px;
+    }
+
+    .spec-block {
+      margin-bottom: 2px;
+    }
+
+    .spec-block.full { grid-column: 1 / -1; }
+
+    .spec-block h3 {
+      font-size: 11px;
+      font-weight: 800;
+      color: var(--pig-pink-dark);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .spec-block h3::before {
+      content: "";
+      width: 4px;
+      height: 12px;
+      background: var(--pig-light);
+      border-radius: 2px;
+    }
+
+    .spec-block p, .spec-block li {
+      font-size: 11px;
+      line-height: 1.55;
+      color: var(--text-muted);
+    }
+
+    .spec-block ul {
+      padding-left: 14px;
+    }
+
+    .color-row {
+      display: flex;
+      gap: 8px;
+      flex-wrap: wrap;
+      margin-top: 4px;
+    }
+
+    .swatch {
+      width: 36px;
+      height: 36px;
+      border-radius: 8px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.12);
+      position: relative;
+    }
+    .swatch::after {
+      content: attr(data-name);
+      position: absolute;
+      bottom: -14px;
+      left: 50%;
+      transform: translateX(-50%);
+      font-size: 8px;
+      color: var(--text-muted);
+      white-space: nowrap;
+    }
+
+    .interaction-tag {
+      display: inline-block;
+      background: var(--pig-light);
+      color: #d81b60;
+      font-size: 9px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-right: 4px;
+      margin-bottom: 4px;
+    }
+
+    .try-hint {
+      margin-top: 10px;
+      padding: 10px 12px;
+      background: linear-gradient(90deg, #ffe6f2, #fff0f7);
+      border-radius: 10px;
+      border-left: 4px solid var(--pig-pink);
+      font-size: 11px;
+      color: var(--text-main);
+      line-height: 1.5;
+    }
+
+    .try-hint strong { color: var(--pig-pink-dark); }
+  </style>
+</head>
+<body>
+  <div class="canvas">
+    <!-- 移动端原型 -->
+    <div class="phone-wrap">
+      <div class="phone-label">375 × 812 · 移动端预览</div>
+      <div class="phone">
+        <div class="phone-notch"></div>
+        <div class="phone-screen" id="phoneScreen">
+          <div class="blob blob-1"></div>
+          <div class="blob blob-2"></div>
+
+          <header class="login-header">
+            <!-- 可爱小猪 SVG 形象 -->
+            <svg class="mascot" viewBox="0 0 120 120" xmlns="http://www.w3.org/2000/svg" aria-label="可爱小猪">
+              <!-- 身体 -->
+              <ellipse cx="60" cy="75" rx="35" ry="28" fill="#ffb3d9"/>
+              
+              <!-- 头部 -->
+              <circle cx="60" cy="50" r="32" fill="#ffb3d9"/>
+              
+              <!-- 耳朵 -->
+              <ellipse cx="38" cy="28" rx="8" ry="14" fill="#ffb3d9" transform="rotate(-25 38 28)"/>
+              <ellipse cx="82" cy="28" rx="8" ry="14" fill="#ffb3d9" transform="rotate(25 82 28)"/>
+              <ellipse cx="38" cy="28" rx="5" ry="9" fill="#ff8cc6" transform="rotate(-25 38 28)"/>
+              <ellipse cx="82" cy="28" rx="5" ry="9" fill="#ff8cc6" transform="rotate(25 82 28)"/>
+              
+              <!-- 眼睛 -->
+              <circle cx="48" cy="45" r="4" fill="#5d4e60"/>
+              <circle cx="72" cy="45" r="4" fill="#5d4e60"/>
+              <circle cx="49" cy="43" r="1.5" fill="#fff"/>
+              <circle cx="73" cy="43" r="1.5" fill="#fff"/>
+              
+              <!-- 腮红 -->
+              <ellipse cx="35" cy="52" rx="6" ry="4" fill="#ff8cc6" opacity="0.4"/>
+              <ellipse cx="85" cy="52" rx="6" ry="4" fill="#ff8cc6" opacity="0.4"/>
+              
+              <!-- 鼻子 -->
+              <ellipse cx="60" cy="58" rx="12" ry="10" fill="#ffadd2"/>
+              <ellipse cx="56" cy="58" rx="3" ry="4" fill="#ff8cc6"/>
+              <ellipse cx="64" cy="58" rx="3" ry="4" fill="#ff8cc6"/>
+              
+              <!-- 嘴巴 -->
+              <path d="M 60 62 Q 55 68 50 66" stroke="#5d4e60" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              <path d="M 60 62 Q 65 68 70 66" stroke="#5d4e60" stroke-width="1.5" fill="none" stroke-linecap="round"/>
+              
+              <!-- 小手 -->
+              <ellipse cx="28" cy="75" rx="8" ry="6" fill="#ffb3d9"/>
+              <ellipse cx="92" cy="75" rx="8" ry="6" fill="#ffb3d9"/>
+              
+              <!-- 小脚 -->
+              <ellipse cx="48" cy="100" rx="8" ry="6" fill="#ffb3d9"/>
+              <ellipse cx="72" cy="100" rx="8" ry="6" fill="#ffb3d9"/>
+              
+              <!-- 尾巴 -->
+              <path d="M 90 80 Q 100 75 102 70 Q 104 65 100 62" stroke="#ffb3d9" stroke-width="4" fill="none" stroke-linecap="round"/>
+            </svg>
+            <h1>可爱小猪登录</h1>
+            <p>欢迎来到粉红猪猪的世界～</p>
+          </header>
+
+          <form class="login-form" id="loginForm" novalidate>
+            <div class="field">
+              <label for="account">账号</label>
+              <div class="input-wrap" id="accountWrap">
+                <span class="input-icon">👤</span>
+                <input type="text" id="account" placeholder="手机号 / 邮箱" autocomplete="username" />
+              </div>
+            </div>
+            <div class="field">
+              <label for="password">密码</label>
+              <div class="input-wrap" id="pwdWrap">
+                <span class="input-icon">🔒</span>
+                <input type="password" id="password" placeholder="请输入密码" autocomplete="current-password" />
+                <button type="button" class="toggle-pwd" id="togglePwd" aria-label="显示密码">👁</button>
+              </div>
+            </div>
+            <div class="forgot">
+              <a id="forgotLink">忘记密码？</a>
+            </div>
+            <button type="submit" class="btn-login" id="btnLogin">
+              <span class="spinner"></span>
+              <span class="btn-text">登 录</span>
+            </button>
+          </form>
+
+          <footer class="login-footer">
+            <p class="register-hint">还没有账号？<a id="registerLink">立即注册</a></p>
+          </footer>
+
+          <div class="toast" id="toast"></div>
+
+          <div class="success-overlay" id="successOverlay">
+            <div class="check">✓</div>
+            <h3>登录成功！</h3>
+            <p>欢迎来到粉红猪猪的世界</p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- 设计说明 -->
+    <aside class="spec-panel">
+      <header class="spec-header">
+        <span class="spec-badge">PRD 原型</span>
+        <div>
+          <h2>可爱小猪 · 登录页设计说明</h2>
+          <span>高保真可交互原型 · v1.0</span>
+        </div>
+      </header>
+
+      <div class="spec-grid">
+        <section class="spec-block full">
+          <h3>设计定位</h3>
+          <p>以可爱小猪为情感载体，打造温馨、甜美、有亲和力的账号密码登录页。面向年轻用户，用粉嫩色系降低登录心理门槛，同时保持信息层级清晰、操作路径最短（仅账号+密码）。</p>
+        </section>
+
+        <section class="spec-block">
+          <h3>色彩系统</h3>
+          <div class="color-row">
+            <div class="swatch" style="background:#ffb3d9" data-name="猪猪粉"></div>
+            <div class="swatch" style="background:#ff8cc6" data-name="深粉"></div>
+            <div class="swatch" style="background:#d4a5ff" data-name="梦幻紫"></div>
+            <div class="swatch" style="background:#fff5fb" data-name="粉底色"></div>
+          </div>
+        </section>
+
+        <section class="spec-block">
+          <h3>字体层级</h3>
+          <ul>
+            <li>标题 20px / 900 · 可爱品牌感</li>
+            <li>输入 14px · 易读触控区</li>
+            <li>辅助 11px · 说明与链接</li>
+          </ul>
+        </section>
+
+        <section class="spec-block">
+          <h3>布局规范</h3>
+          <ul>
+            <li>画布 375pt 逻辑宽，安全区内边距 20px</li>
+            <li>输入框高度 48px，圆角 12px</li>
+            <li>主按钮高度 48px，圆角 14px</li>
+            <li>一屏完成：头图+表单+注册引导</li>
+          </ul>
+        </section>
+
+        <section class="spec-block full">
+          <h3>交互说明（可点击体验）</h3>
+          <p>
+            <span class="interaction-tag">聚焦</span>输入框高亮粉边+微上浮<br>
+            <span class="interaction-tag">切换</span>密码可见/隐藏 👁<br>
+            <span class="interaction-tag">校验</span>空值抖动+Toast 提示<br>
+            <span class="interaction-tag">加载</span>登录按钮 Loading 1.2s<br>
+            <span class="interaction-tag">成功</span>全屏成功态+可爱文案<br>
+            <span class="interaction-tag">链接</span>忘记密码 / 注册 Toast 反馈
+          </p>
+        </section>
+
+        <section class="spec-block">
+          <h3>IP 元素</h3>
+          <p>定制 SVG 小猪形象（粉色身体、圆润耳朵、可爱鼻子），配合「可爱小猪登录」文案与粉色背景光斑，强化品牌识别而不喧宾夺主。</p>
+        </section>
+
+        <section class="spec-block">
+          <h3>可用性</h3>
+          <ul>
+            <li>触控热区 ≥ 44px</li>
+            <li>错误态红色描边+震动</li>
+            <li>对比度符合 WCAG AA</li>
+          </ul>
+        </section>
+      </div>
+
+      <div class="try-hint">
+        <strong>👉 试玩指引：</strong>账号输入 <code>piggy</code>，密码 <code>123456</code> 可体验完整登录成功流程；留空点击登录可看校验交互。
+      </div>
+    </aside>
+  </div>
+
+  <script>
+    const form = document.getElementById('loginForm');
+    const account = document.getElementById('account');
+    const password = document.getElementById('password');
+    const accountWrap = document.getElementById('accountWrap');
+    const pwdWrap = document.getElementById('pwdWrap');
+    const btnLogin = document.getElementById('btnLogin');
+    const togglePwd = document.getElementById('togglePwd');
+    const toast = document.getElementById('toast');
+    const successOverlay = document.getElementById('successOverlay');
+    const forgotLink = document.getElementById('forgotLink');
+    const registerLink = document.getElementById('registerLink');
+
+    let toastTimer;
+
+    function showToast(msg) {
+      clearTimeout(toastTimer);
+      toast.textContent = msg;
+      toast.classList.add('show');
+      toastTimer = setTimeout(() => toast.classList.remove('show'), 2200);
+    }
+
+    function setError(wrap, on) {
+      wrap.classList.toggle('error', on);
+      if (on) setTimeout(() => wrap.classList.remove('error'), 500);
+    }
+
+    togglePwd.addEventListener('click', () => {
+      const isPwd = password.type === 'password';
+      password.type = isPwd ? 'text' : 'password';
+      togglePwd.textContent = isPwd ? '🙈' : '👁';
+      togglePwd.setAttribute('aria-label', isPwd ? '隐藏密码' : '显示密码');
+    });
+
+    btnLogin.addEventListener('click', function (e) {
+      const rect = this.getBoundingClientRect();
+      const ripple = document.createElement('span');
+      ripple.className = 'ripple';
+      ripple.style.width = ripple.style.height = '20px';
+      ripple.style.left = (e.clientX - rect.left - 10) + 'px';
+      ripple.style.top = (e.clientY - rect.top - 10) + 'px';
+      this.appendChild(ripple);
+      setTimeout(() => ripple.remove(), 600);
+    });
+
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+      let valid = true;
+
+      if (!account.value.trim()) {
+        setError(accountWrap, true);
+        valid = false;
+      }
+      if (!password.value.trim()) {
+        setError(pwdWrap, true);
+        valid = false;
+      }
+      if (!valid) {
+        showToast('请填写账号和密码哦～');
+        return;
+      }
+
+      btnLogin.classList.add('loading');
+      btnLogin.querySelector('.btn-text').textContent = '登录中...';
+
+      await new Promise(r => setTimeout(r, 1200));
+
+      btnLogin.classList.remove('loading');
+      btnLogin.querySelector('.btn-text').textContent = '登 录';
+
+      if (account.value.trim() === 'piggy' && password.value === '123456') {
+        successOverlay.classList.add('show');
+        setTimeout(() => {
+          successOverlay.classList.remove('show');
+          showToast('原型演示：已退出成功态');
+        }, 2500);
+      } else {
+        setError(pwdWrap, true);
+        showToast('账号或密码错误，试试 piggy / 123456');
+      }
+    });
+
+    forgotLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      showToast('忘记密码流程（原型占位）');
+    });
+
+    registerLink.addEventListener('click', (e) => {
+      e.preventDefault();
+      window.location.href = './register-prototype.html';
+    });
+  </script>
+</body>
+</html>
